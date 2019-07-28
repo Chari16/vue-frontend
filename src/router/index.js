@@ -27,6 +27,11 @@ const router = new Router({
             name:'signup',
             component: () => import('@/components/Signup')
         },
+        {
+            path:'/login',
+            name:'login',
+            component: () => import('@/components/Login')
+        }
     ]
 })
 

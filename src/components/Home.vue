@@ -1,12 +1,19 @@
 <template>
+  <div>
+  <Header/>
   <div class="home">
     My home
+  </div>
   </div>
 </template>
 
 <script>
+import Header from './Header'
 export default {
   name: 'Home',
+    components: {
+    Header,
+  },
   props: {
     msg: String
   }

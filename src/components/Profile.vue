@@ -1,4 +1,6 @@
 <template>
+<div>
+  <Header/>
 <div class="profile">
 	My Profile
 	<p>"Yo, Cold 187. They tryin' to give you a murder rap. And you ain't even like that. Yo, serve these niggas, cause they deserve to get dissed."
@@ -58,11 +60,16 @@ Now I got a murder rap
 Cause a brother like me said well</p>
 <br>
 <br><br><br><br>
+</div>
 </div>	
 </template>
 <script>
+import Header from './Header'
 export default {
-    name: 'Profile', 
+    name: 'Profile',
+    components: {
+      Header,
+    } 
 }
 </script>
 <style>
