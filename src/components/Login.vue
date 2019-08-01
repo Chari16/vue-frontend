@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import service from './service'
 export default {
     name:'Login',
     data () {
@@ -37,8 +38,15 @@ export default {
         }
     },
     methods: {
-        loginSubmit(){
-            console.log(this.loginObj,"testing")
+        async loginSubmit(){
+          try {
+            const response = await service.userLogin(this.loginObj)
+
+            console.log(response,"loggged in with token")
+          }
+          catch(e) {
+            console.log(e,"error  has occured")
+          }
         }
     } 
 }

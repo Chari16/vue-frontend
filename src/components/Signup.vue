@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import service from './service'
 export default {
     name: 'Signup',
     data () {
@@ -32,8 +33,17 @@ export default {
         }
     },
     methods: {
-        signupSubmit(){
-            console.log(this.signupObj,"test")
+        async signupSubmit(){
+           try{
+            const response = await service.userSignup(this.signupObj)
+            if(response.data.token) {
+                this.$router.push('/login')
+            }
+             console.log(response.data.token,"test")
+           }
+           catch(e) {
+               console.log(e,"The error occured")
+           }
         }
     }    
 }
