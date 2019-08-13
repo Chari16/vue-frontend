@@ -1,5 +1,3 @@
-<<<<<<< Updated upstream
-=======
 const axios = require('axios')
 import VueCookies from 'vue-cookies'
 
@@ -32,4 +30,3 @@ export {
 	api,
 	loginApi
 }
->>>>>>> Stashed changes

@@ -21,11 +21,8 @@
 </template>
 
 <script>
-<<<<<<< Updated upstream
-=======
 import axios from 'axios'
 import service from './service'
->>>>>>> Stashed changes
 export default {
     name:'Login',
     data () {
@@ -48,11 +45,6 @@ export default {
 
     },
     methods: {
-<<<<<<< Updated upstream
-        loginSubmit(){
-            console.log(this.loginObj,"testing")
-        }
-=======
         async loginSubmit(){
           try {
             const response = await service.userLogin(this.loginObj)
@@ -69,7 +61,6 @@ export default {
             console.log(e,"error  has occured")
           }
         },
->>>>>>> Stashed changes
     } 
 }
 </script>

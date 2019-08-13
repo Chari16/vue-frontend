@@ -42,10 +42,7 @@
 </template>
 
 <script>
-<<<<<<< Updated upstream
-=======
 import service from "./service";
->>>>>>> Stashed changes
 export default {
   name: "Signup",
   data() {
@@ -65,16 +62,6 @@ export default {
         if (response.data.token) {
           this.$router.push("/login");
         }
-<<<<<<< Updated upstream
-        }
-    },
-    methods: {
-        signupSubmit(){
-            console.log(this.signupObj,"test")
-        }
-    }    
-}
-=======
         console.log(response.data.token, "test");
       } catch (e) {
         console.log(e, "The error occured");
@@ -82,7 +69,6 @@ export default {
     }
   }
 };
->>>>>>> Stashed changes
 </script>
 
 <style scoped>
