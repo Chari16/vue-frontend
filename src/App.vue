@@ -1,7 +1,6 @@
 <template>
   <div id="app">
-    
-      <router-view></router-view>
+    <router-view ></router-view>
   </div>  
 </template>
 
@@ -9,6 +8,8 @@
 
 export default {
   name: 'app',
+  methods: {
+  }
 }
 </script>
 
@@ -24,12 +25,5 @@ export default {
 body {
   margin: 0px;
 }
-.new {
-    position: absolute;
-    background: #fff;
-    height: 100%;
-    top: 0;
-    left: 0;
-    width: 100%;
-}
+
 </style>

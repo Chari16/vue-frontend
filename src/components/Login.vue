@@ -1,31 +1,31 @@
 <template>
-<div style="border:1px solid #ccc">
   <div class="container">
     <h1>Log In</h1>
     <p>Login in and Enjoy the services.</p>
-    <hr>
+    <div class="form">
+      <div class="form-element-container">
+        <input v-model="loginObj.email" type="text" name="email" required>
+        <label class="form-label--floating" for="email">Email</label>
+      </div>
 
-    <label for="email"><b>Email</b></label>
-    <input v-model="loginObj.email" type="text" placeholder="Enter Email" name="email" required>
+      <div class="form-element-container">
+        <input v-model="loginObj.password" type="password" name="psw" required>
+        <label class="form-label--floating" for="psw">Password</label>
+      </div>
 
-    <label for="psw"><b>Password</b></label>
-    <input v-model="loginObj.password" type="password" placeholder="Enter Password" name="psw" required>
-    
-    <label>
-      <input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px"> Remember me
-    </label>
-    
-    <p>By creating an account you agree to our <a href="#" style="color:dodgerblue">Terms & Privacy</a>.</p>
-
-    <div class="clearfix">
-      <button type="button" class="cancelbtn">Cancel</button>
-      <button @click="loginSubmit" class="signupbtn">Sign Up</button>
+      <div class="clearfix">
+      <button @click="loginSubmit" class="signupbtn">Log in</button>
+      </div>
     </div>
   </div>
-</div>
 </template>
 
 <script>
+<<<<<<< Updated upstream
+=======
+import axios from 'axios'
+import service from './service'
+>>>>>>> Stashed changes
 export default {
     name:'Login',
     data () {
@@ -36,73 +36,99 @@ export default {
         }
         }
     },
+    created() {
+      if(this.$cookies.isKey('auth')) {
+        this.$cookies.remove('auth')
+        console.log("Auth key removed");
+        this.$store.dispatch('resetHeader')
+        console.log(this.$store.state.accessToken,"Hey")
+        this.$store.dispatch('updateloggedOut')
+
+      }
+
+    },
     methods: {
+<<<<<<< Updated upstream
         loginSubmit(){
             console.log(this.loginObj,"testing")
         }
+=======
+        async loginSubmit(){
+          try {
+            const response = await service.userLogin(this.loginObj)
+            if(response.data){
+              this.$cookies.set("auth",response.data.token,'15min');  
+            }
+            console.log(response.data.token,"loggged in with token")
+            this.$store.dispatch('setHeader',response.data.token)
+            this.$store.dispatch('updateloggedIn')
+            console.log(this.$store.state.accessToken,'My AccessToken from state')
+            this.$router.push('/home') 
+          }
+          catch(e) {
+            console.log(e,"error  has occured")
+          }
+        },
+>>>>>>> Stashed changes
     } 
 }
 </script>
 
-<style>
-/* * {
-  margin: 0;
-  padding: 0;
-} */
+<style scoped>
 body {font-family: Arial, Helvetica, sans-serif;}
 * {box-sizing: border-box}
 
 /* Full-width input fields */
 input[type=text], input[type=password] {
   width: 100%;
-  padding: 15px;
-  margin: 5px 0 22px 0;
-  display: inline-block;
-  border: none;
-  background: #f1f1f1;
+  height: 52px;
+  padding: 28px 12px 6px;
+  margin: 0 0 12px 0;
+  display: block;
+  box-shadow: none;
+  border-radius: 2px;
+  border: 1px solid rgba(0,0,0,0.6);
+  font-size: 1.5rem;
+  line-height: 1.33333;
+  font-weight: 200;
+  color: rgba(0,0,0,0.9);
+  position: relative;
+  z-index: 1;
 }
 
-input[type=text]:focus, input[type=password]:focus {
-  background-color: #ddd;
+/* input[type=text]:focus, input[type=password]:focus {
+  background-color:transparent;
   outline: none;
-}
-
-hr {
-  border: 1px solid #f1f1f1;
-  margin-bottom: 25px;
-}
+  border-color: #0073b1;
+  box-shadow: 0 0 0 1px #0073b1; 
+} */
 
 /* Set a style for all buttons */
 button {
-  background-color: #4CAF50;
+  background-color: #0073b1;
   color: white;
   padding: 14px 20px;
-  margin: 8px 0;
+  margin: 15px 0;
   border: none;
   cursor: pointer;
   width: 100%;
   opacity: 0.9;
+  font-size: 20px;
 }
 
 button:hover {
   opacity:1;
 }
 
-/* Extra styles for the cancel button */
-.cancelbtn {
-  padding: 14px 20px;
-  background-color: #f44336;
-}
-
 /* Float cancel and signup buttons and add an equal width */
-.cancelbtn, .signupbtn {
-  float: left;
-  width: 50%;
+ .signupbtn {
+  width: 100%;
 }
 
 /* Add padding to container elements */
 .container {
   padding: 16px;
+  margin-top: 79px;
 }
 
 /* Clear floats */
@@ -113,9 +139,40 @@ button:hover {
 }
 
 /* Change styles for cancel button and signup button on extra small screens */
-@media screen and (max-width: 300px) {
-  .cancelbtn, .signupbtn {
-     width: 100%;
+@media only screen and (max-width: 768px) {
+   .form {
+     width: 100% !important;
   }
 }
+
+.form-element-container {
+  position: relative;
+  background-color: #fff;
+}
+
+.form {
+  width: 384px;
+  margin: auto;
+}
+label {
+  display:block;
+}
+.form-label--floating {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  padding: 14px 0 0 12px;
+  margin: 0;
+  transition: .2s all;
+  font-size: 1.3rem;
+}
+
+.form-element-container>input:focus + .form-label--floating {
+  top: -10px;
+  line-height: 1.42857;
+  color: rgba(0,0,0,0.9);
+  font-size: 0.9rem;
+}
+
 </style>
