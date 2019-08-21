@@ -1,5 +1,7 @@
 <template>
 <div>
+  <div v-if="loading" class="loader"></div>
+  <div v-else>
   <div class="header">
     <div class="row">
       <div class ="left"><router-link to="/home"><img class="logo" src ="../assets/logo.png"></router-link>
@@ -8,7 +10,7 @@
         <ul class="navbar">          
         <li><router-link to="/home"> Home</router-link></li>
         <li><router-link to="/home/profile"> Profile</router-link></li>
-        <li @click="logout"> Logout</li>
+        <span class="logoutbtn" @click="logout"> Logout</span>
         </ul>
       </div>
     </div>
@@ -20,6 +22,7 @@
   </div>
   <div class="page-content">
     <router-view></router-view>
+  </div>
   </div>
 </div>
 <!-- <div>
@@ -56,6 +59,7 @@
 
 <script scoped>
 import service from './service'
+import VueCookies from 'vue-cookies'
 const axios = require('axios')
 export default {
   name: 'Home',
@@ -65,8 +69,9 @@ export default {
   data() {
     return {
       wholeresponse: [],
-      loading:false,
-      profile:{ }
+      loading:true,
+      profile:{ },
+      avatar:null,
     }
   },
   props: {
@@ -88,7 +93,8 @@ export default {
     },
     async logout() {
       try {
-        const token = this.$store.state.accessToken;
+        const token = VueCookies.get('auth')
+        // const token = this.$store.state.accessToken;
         const response = await axios({ method: 'post',
         url: 'https://task-app-16.herokuapp.com/users/logout',
         headers: { 'Authorization': 'Bearer ' + token } })
@@ -102,7 +108,8 @@ export default {
     },
     async loadProfile() {
       try {
-        const token = this.$store.state.accessToken;
+        const token = VueCookies.get('auth')
+        // const token = this.$store.state.accessToken;
         axios.get('https://task-app-16.herokuapp.com/users/me',{
 		    headers: {
 			    "Content-Type": "application/json",
@@ -111,6 +118,7 @@ export default {
         }).then( ( response ) => {
           this.profile = response.data;
           console.log( response,"it worked" )
+          this.loading=false
         })
       }
       catch(e) {
@@ -280,5 +288,31 @@ z-index: 1;
 }
 .page-content {
   font-size: 20px;
+}
+.loader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #42b983;
+  width: 80px;
+  height: 80px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+  margin: auto;
+}
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.logoutbtn{
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: black;
+  font-size: 20px;
+  text-decoration: none;
+  padding-left: 25px;
 }
 </style>

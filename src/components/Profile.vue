@@ -2,22 +2,25 @@
 <div>
   <!-- <Header/> -->
   <div class="profile">
-    <div v-for="(todo, index) in todos" :key="index" class="card" id="b1">
-      {{todo.description}}
+    <div v-if="loading" class="loader"></div>
+    <div v-else class="container">
+    <div  v-for="(todo, index) in todos" :key="index" class="card" id="b1">
+      <span :class="{done: todo.completed}" @click="singleTask(todo._id)">{{todo.description}}</span>
       <span @click="deletetask(todo._id,index)" class="button">x</span>
-      <span @click="dropdown(todo,index)" class="dropdown">^</span>
-        <div class="extra" v-show="dpdown==index">
+        <!-- <div class="extra" v-show="dpdown==index">
           <p>Hello World!</p>
-        </div>
+        </div> -->
+        <!-- <button @click="singleTask(todo._id)" style="color:blue">View</button> -->
     </div>
     <div class="new-task-card">
     <input v-model="newtask.description" @keyup.enter="addtodo" type="text">
+    </div>
     </div>
   </div>
 </div>	
 </template>
 <script>
-// import Header from './Header'
+import VueCookies from 'vue-cookies'
 const axios = require('axios')
 export default {
     name: 'Profile',
@@ -31,6 +34,7 @@ export default {
           description :null
         },
         todos:[],
+        loading:true,
       }
     },
     created() {
@@ -40,7 +44,8 @@ export default {
     methods: {
     async loadData() {
       try {
-        const token = this.$store.state.accessToken;
+        const token = VueCookies.get('auth')
+        // const token = this.$store.state.accessToken;
         axios.get('https://task-app-16.herokuapp.com/users/me',{
 		    headers: {
 			    "Content-Type": "application/json",
@@ -58,7 +63,8 @@ export default {
       console.log(id,"task id")
       this.todos.splice(index,1)
       try {
-        const token = this.$store.state.accessToken;
+        const token = VueCookies.get('auth')
+        // const token = this.$store.state.accessToken;
         const response = await axios({ method: 'delete',
         url: `https://task-app-16.herokuapp.com/tasks/${id}`,
         headers: { 'Authorization': 'Bearer ' + token }})
@@ -72,7 +78,8 @@ export default {
     async addtodo() {
       try {
         // console.log(this.newtask,"kya shot h")
-        const token = this.$store.state.accessToken;
+        const token = VueCookies.get('auth')
+        // const token = this.$store.state.accessToken;
         const response = await axios({ method: 'post',
         url: 'https://task-app-16.herokuapp.com/tasks',
         headers: { 'Authorization': 'Bearer ' + token }, data:this.newtask })
@@ -95,7 +102,8 @@ export default {
     },
     async getTodos(){
       try {
-        const token = this.$store.state.accessToken;
+        const token = VueCookies.get('auth')
+        // const token = this.$store.state.accessToken;
         axios.get('https://task-app-16.herokuapp.com/tasks',{
 		    headers: {
 			    "Content-Type": "application/json",
@@ -104,23 +112,20 @@ export default {
         }).then( ( response ) => {
           this.todos = response.data;
           console.log( response,"todos retrieved" )
+          this.loading=false;
         })
       }
       catch(e) {
         console.log(e,"error occurred from Todo Api")
       }
+    },
+    singleTask(id) {
+      console.log(id,"clicked")
+      this.$router.push('task/'+ id)
     }
   } 
 }
-import $ from 'jquery'
-function openTab(tabName) {
-  var i, x;
-  x = $(document).getElementsByClassName("containerTab");
-  for (i = 0; i < x.length; i++) {
-    x[i].style.display = "none";
-  }
-  document.getElementById(tabName).style.display = "block";
-}
+
 </script>
 <style scoped>
 .profile {
@@ -133,14 +138,19 @@ function openTab(tabName) {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   padding: 16px;
   text-align: center;
-  background-color: #f1f1f1;
-  width: 600px;
+  background-color: #fffbfb;
+  width: 100%;
   margin-bottom: 20px;
   position: relative;
 }
 
 .button{
-  float: left;
+  position:absolute;
+  right: 10px;
+  font-size: 25px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: black;
+  top: 10px;
 }
 input {
   height: 100%;
@@ -156,7 +166,7 @@ input {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   text-align: center;
   background-color: #f1f1f1;
-  width: 600px;
+  width: 100%;
   margin-bottom: 20px;
 }
 .dropdown {
@@ -177,5 +187,31 @@ input {
 }
 .extra {
   border:1px solid black;
+}
+.loader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #42b983;
+  width: 80px;
+  height: 80px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+  margin: auto;
+}
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.container{
+  margin:50px 100px;
+  box-sizing: border-box;
+}
+.done {
+  text-decoration: line-through;
 }
 </style>
