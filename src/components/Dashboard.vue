@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="title">
   	<h1>Welcome to my Web App</h1>
 			<br>
 			<h3>Have a look by being a part of it..!</h3>
